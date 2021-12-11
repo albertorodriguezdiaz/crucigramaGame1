@@ -20,10 +20,29 @@ const crearVariables = (objCru)=>{
     objCru.forEach((objC, fila)=>{
         objC.ubicacion.map((ubi, col)=>{
             // Le añadimos a cada variable el valor de su casilla
-            this[`palabra_f${fila+1}c${col+1}`] = document.getElementById(ubi);
+            this[`palabra_f${fila+1}c${col+1}`] = document.getElementById(ubi.fila);
         })
     })
 }
+
+// Creamos las variables con los valores de cada palabra ingresadas por el jugador
+const crearVariablePalabra = (objPalabra, palabraExiste)=>{
+    let palabra = '';
+
+    objPalabra.forEach((objC, fila)=>{
+        objC.ubicacion.map((ubi, col)=>{
+            // Comparamos la palabra a volver variable por la palabra en el objeto
+            if (palabraExiste===objC.palabra){
+                // Le añadimos a cada variable el valor de su casilla
+                palabra += document.getElementById(ubi.fila).value;
+            } 
+            
+        })
+    })
+
+    return palabra;
+}
+
 
 
 // Creamos el tablero
@@ -67,8 +86,8 @@ const habilitarCampos = (objCru)=>{
             // Habilitamos las casillas asignadas
             document.getElementById(ubi.fila).readOnly = false;
 
+            // Agregamos color al fondo de los campos 
             let palabra = document.getElementById(ubi.fila);
-            console.log(palabra);
             palabra.classList.add("bgCammpo");
 
         })
@@ -77,6 +96,22 @@ const habilitarCampos = (objCru)=>{
 
 const tableroX = 6;
 const tableroY = 6;
+
+
+setInterval(() => {
+    const palabra_fuego = crearVariablePalabra(objCrucigrama,'fuego');
+    const palabra_oso = crearVariablePalabra(objCrucigrama,'oso');
+    const palabra_gato = crearVariablePalabra(objCrucigrama,'gato');
+    const palabra_loro = crearVariablePalabra(objCrucigrama,'loro');
+
+    
+    console.log(palabra_fuego);
+
+    if(palabra_fuego==='fuego' && palabra_oso==='oso' && palabra_gato==='gato' && palabra_loro==='loro'){
+        console.log(`GANASTE :) - ${palabra_fuego} + ${palabra_oso} + ${palabra_gato} + ${palabra_loro}`);
+    }
+
+  }, 5000);
 
 
 // Instanciamos el tablero y se lo añadimos al la clase html .crucigramaTablero
@@ -88,8 +123,8 @@ crucigramaTablero.insertAdjacentHTML("afterbegin", tablero);
 deshabilitarCampos(tableroX,tableroY);
 
 // Creamos las varibalas a partir del JSON con la ubicacion de las casillas
-crearVariables(objCrucigrama);
-console.log(palabra_f1c1);
+// crearVariables(objCrucigrama);
 
+// Habilitamos los campos necesarios para hacer el juego
 habilitarCampos(objCrucigrama);
 
